@@ -6,20 +6,16 @@ Interactive dashboard + free collection/NLP pipeline (Facebook BCUB group search
 
 ## Live dashboard
 
-- **Local:** `streamlit run dashboard/app.py` → http://localhost:8501  
-- **Hosted:** [Streamlit Community Cloud](https://share.streamlit.io) (deploys from this GitHub repo — GitHub Pages cannot run Streamlit)
+- **GitHub Pages:** https://shudipta-dip.github.io/bibm-bank-social-listening/
+- **Local (full filters):** `streamlit run dashboard/app.py` → http://localhost:8501
 
-### Deploy on Streamlit Community Cloud
+GitHub Pages hosts a **static** Plotly snapshot from `docs/` (GitHub cannot run Streamlit servers). The Streamlit app is unchanged for local interactive filtering.
 
-1. Push this repo to GitHub (public repo required on the free Cloud plan).
-2. Open [share.streamlit.io](https://share.streamlit.io) and sign in with GitHub (`Shudipta-Dip`).
-3. **Create app** → select this repository.
-4. Set:
-   - **Main file path:** `dashboard/app.py`
-   - **Python version:** 3.11+ (or 3.12)
-5. Deploy. The app loads `data/processed/unified_mentions_clean.csv` from the repo.
+Rebuild the Pages site after data or chart logic changes:
 
-After each dashboard/data change, push to `main`/`master`; Cloud will redeploy automatically if that is enabled.
+```powershell
+python scripts/build_github_pages.py
+```
 
 ## Quick start (dashboard only)
 
