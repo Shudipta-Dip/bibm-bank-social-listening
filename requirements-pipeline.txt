@@ -1,0 +1,17 @@
+# Full collection + NLP pipeline (local research machine)
+-r requirements.txt
+google-play-scraper>=1.2.7
+requests>=2.32.0
+urllib3>=2.0.0
+PyYAML>=6.0.1
+python-dotenv>=1.0.1
+playwright>=1.49.0
+pyarrow>=17.0.0
+langdetect>=1.0.9
+transformers>=4.44.0
+torch>=2.2.0
+scikit-learn>=1.5.0
+click>=8.1.7
+tqdm>=4.66.0
+tenacity>=9.0.0
+python-dateutil>=2.9.0

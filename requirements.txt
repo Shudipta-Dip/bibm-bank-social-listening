@@ -1,0 +1,4 @@
+# Dashboard / Streamlit Community Cloud (lean — do not add torch here)
+streamlit>=1.40.0
+plotly>=5.24.0
+pandas>=2.2.0

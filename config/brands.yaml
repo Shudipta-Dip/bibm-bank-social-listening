@@ -1,0 +1,157 @@
+# BIBM Bank Social Listening — brand & source targets
+since_days: 365
+
+brands:
+  brac_bank:
+    display_name: "BRAC Bank"
+    google_play:
+      app_id: "com.bracbank.astha"
+      lang: "en"
+      country: "bd"
+    app_store:
+      app_id: "1525525061"
+      country: "bd"
+      # fallback storefronts if bd has sparse reviews
+      fallback_countries: ["us", "gb", "sg", "ae", "in", "au"]
+    facebook:
+      # Confirm official Page URL/ID at kickoff (HITL H2)
+      page_url: "https://www.facebook.com/BRACBank"
+      page_id: ""  # numeric Page ID if known; resolved via Graph if token present
+      token_env: "META_PAGE_TOKEN_BRAC"
+    facebook_group:
+      searches:
+        - query: "brac"
+          url: "https://www.facebook.com/groups/2248656405437853/search/?q=brac"
+        - query: "ব্র্যাক"
+          url: "https://www.facebook.com/groups/2248656405437853/search/?q=%E0%A6%AC%E0%A7%8D%E0%A6%B0%E0%A7%8D%E0%A6%AF%E0%A6%BE%E0%A6%95"
+    linkedin:
+      company_url: "https://www.linkedin.com/company/brac-bank-ltd"
+      company_slug: "brac-bank-ltd"
+    reddit:
+      queries:
+        - "BRAC Bank"
+        - "Astha"
+
+  scb_bangladesh:
+    display_name: "Standard Chartered Bangladesh"
+    google_play:
+      app_id: "com.sc.mobilebanking.bd"
+      lang: "en"
+      country: "bd"
+    app_store:
+      app_id: "1212168033"
+      country: "bd"
+      fallback_countries: ["us", "gb", "sg", "ae", "in", "au"]
+    facebook:
+      page_url: "https://www.facebook.com/StandardCharteredBD"
+      page_id: ""
+      token_env: "META_PAGE_TOKEN_SCB"
+    facebook_group:
+      searches:
+        - query: "standard chartered"
+          url: "https://www.facebook.com/groups/2248656405437853/search/?q=standard%20chartered"
+        - query: "scb"
+          url: "https://www.facebook.com/groups/2248656405437853/search/?q=scb"
+    linkedin:
+      company_url: "https://www.linkedin.com/company/standardchartered"
+      company_slug: "standardchartered"
+    reddit:
+      queries:
+        - "Standard Chartered"
+        - "SCB"
+
+reddit:
+  subreddits:
+    - Dhaka
+    - bangladesh
+  fetch_comments: false
+
+facebook_group:
+  group_id: "2248656405437853"
+  group_slug: "bcub.bd"
+  group_name: "Bank Card Users of Bangladesh (BCUB)"
+  cdp_url: "http://127.0.0.1:9222"
+  max_posts_per_brand: 100
+  max_comments_per_post: 50
+  scroll_rounds: 30
+
+collection:
+  max_retries: 3
+  play_batch_size: 200
+  browser_delay_ms_min: 1500
+  browser_delay_ms_max: 4000
+  linkedin_delay_ms_min: 3000
+  linkedin_delay_ms_max: 7000
+  app_store_min_coverage_months: 6
+  gold_sample_size: 200
+  relevance_sample_size: 50
+  relevance_noise_threshold: 0.15
+  sentiment_agreement_threshold: 0.65
+  cohen_kappa_threshold: 0.5
+
+sentiment:
+  model: "cardiffnlp/twitter-xlm-roberta-base-sentiment"
+  # confidence score is model max softmax probability in [0, 1]
+  use_rating_sentiment_for_reviews: true
+
+nlp:
+  themes:
+    app_ux:
+      - "app"
+      - "login"
+      - "otp"
+      - "crash"
+      - "slow"
+      - "update"
+      - "ui"
+      - "ux"
+      - "bug"
+      - "error"
+      - "অ্যাপ"
+      - "লগইন"
+      - "ওটিপি"
+    fees:
+      - "fee"
+      - "charge"
+      - "interest"
+      - "cost"
+      - "expensive"
+      - "খরচ"
+      - "চার্জ"
+      - "সুদ"
+    service:
+      - "service"
+      - "support"
+      - "customer care"
+      - "call center"
+      - "branch"
+      - "staff"
+      - "সেবা"
+      - "সাপোর্ট"
+      - "শাখা"
+    cards:
+      - "card"
+      - "debit"
+      - "credit"
+      - "visa"
+      - "mastercard"
+      - "কার্ড"
+      - "ডেবিট"
+      - "ক্রেডিট"
+    transfers:
+      - "transfer"
+      - "beftn"
+      - "npsb"
+      - "bkash"
+      - "nagad"
+      - "rocket"
+      - "ট্রান্সফার"
+      - "বিকাশ"
+    security:
+      - "security"
+      - "fraud"
+      - "scam"
+      - "hack"
+      - "password"
+      - "নিরাপদ"
+      - "প্রতারণা"
