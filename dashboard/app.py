@@ -815,7 +815,7 @@ with tab_pos:
         st.markdown(
             f"""
 <div class="tile">
-  {section_title("Identified PODs", "Candidate points of difference: themes one bank owns more than the other, coloured by whether talk is net positive or negative. A BRAC-led theme with green net sentiment is a real BRAC advantage. A bank that leads volume but sits in red is associated with that problem more than the rival — a liability, not a POD.", "star")}
+  {section_title("Identified PODs", "After text-sentiment reclassification, the main volume leaders are complaint-driven, not brand wins. BRAC leads App/UX talk but with deep net-negative sentiment (still less severe than SCB). SCB leads Cards and Fees volume, yet both themes are now net negative for both banks — so SCB is associated with fee/card friction more than it owns a positive POD. Treat red volume leaders as liabilities to fix, not differentiation to claim.", "star")}
   <p class="section-note">Themes with ≥3pp prevalence gap. Labels show net sentiment (pp).</p>
 </div>
 """,
@@ -941,7 +941,7 @@ with tab_touch:
         st.markdown(
             f"""
 <div class="tile">
-  {section_title("Sentiment net by touchpoint", "Compares BRAC vs SCB net sentiment across digital, branch/service and other touchpoints. The bank ahead on a bar is winning that journey moment. If SCB's digital bar sits well below BRAC, the app/UX gap is dragging SCB relative to BRAC; if both are weak, neither has a safe experience anchor.", "sentiment")}
+  {section_title("Sentiment net by touchpoint", "With corrected text sentiment, both banks are net-negative on digital and service — digital is the sharper wound. BRAC digital sits around the high −30s pp vs SCB around the low −60s pp, so SCB’s app/UX talk is materially worse. Service nets also flipped negative for both (SCB more so). Neither bank has a safe experience anchor; BRAC is less damaged digitally, not positively loved.", "sentiment")}
   <p class="section-note">Digital = App/UX · Physical = Service. Net = pos% − neg%.</p>
 </div>
 """,
