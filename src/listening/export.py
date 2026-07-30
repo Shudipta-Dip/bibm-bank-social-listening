@@ -146,16 +146,34 @@ def clean_for_analysis(
     df["author_known"] = df["author_id_hashed"].notna() & (df["author_id_hashed"].astype(str).str.strip() != "")
     df["star_rating"] = pd.to_numeric(df["star_rating"], errors="coerce").astype("Int64")
 
-    # merge sentiment: prefer star-based label for store reviews
-    star_map = {1: "negative", 2: "negative", 3: "neutral", 4: "positive", 5: "positive"}
-    df["sentiment_final"] = df.apply(
-        lambda r: star_map.get(int(r["star_rating"]), r["sentiment_label"])
-        if pd.notna(r["star_rating"])
-        else r["sentiment_label"],
-        axis=1,
+    # Parallel metrics (do NOT merge stars into text sentiment):
+    # - sentiment_text / sentiment_final: text model + policy (brand conversation)
+    # - rating_sentiment: from star_rating when present (app-store signal)
+    from listening.nlp.policy import rating_sentiment_from_stars
+
+    star_map_series = df["star_rating"].apply(
+        lambda x: rating_sentiment_from_stars(int(x) if pd.notna(x) else None)
     )
-    df = df.drop(columns=["sentiment_label"])
-    df["sentiment_score"] = pd.to_numeric(df["sentiment_score"], errors="coerce").round(2)
+    if "rating_sentiment" in df.columns:
+        df["rating_sentiment"] = df["rating_sentiment"].where(
+            df["rating_sentiment"].notna() & (df["rating_sentiment"].astype(str).str.strip() != ""),
+            star_map_series,
+        )
+    else:
+        df["rating_sentiment"] = star_map_series
+
+    # Text path: prefer existing sentiment_label from NLP; never overwrite with stars
+    if "sentiment_label" in df.columns:
+        df["sentiment_text"] = df["sentiment_label"]
+    elif "sentiment_text" not in df.columns:
+        df["sentiment_text"] = "neutral"
+
+    # Backward-compatible alias used by the dashboard
+    df["sentiment_final"] = df["sentiment_text"]
+    drop_cols = [c for c in ["sentiment_label"] if c in df.columns]
+    if drop_cols:
+        df = df.drop(columns=drop_cols)
+    df["sentiment_score"] = pd.to_numeric(df.get("sentiment_score"), errors="coerce").round(2)
 
     # ── Derived columns ───────────────────────────────────────────────────────
     df["created_at"] = pd.to_datetime(df["created_at"], utc=True, errors="coerce")
@@ -181,7 +199,7 @@ def clean_for_analysis(
         "record_id", "brand", "source", "platform_type", "content_type",
         "month_year", "created_at", "is_review", "language",
         "text", "low_quality",
-        "star_rating", "sentiment_final", "sentiment_score",
+        "star_rating", "rating_sentiment", "sentiment_text", "sentiment_final", "sentiment_score",
     ]
     theme_cols = [f"theme_{t}" for t in _KNOWN_THEMES]
     eng_cols = ["engagement_likes", "engagement_helpful", "engagement_comments"]

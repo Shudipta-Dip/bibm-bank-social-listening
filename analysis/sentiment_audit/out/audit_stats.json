@@ -1,0 +1,71 @@
+{
+  "n_total": 3642,
+  "n_production_positive": 968,
+  "n_production_neutral": 1995,
+  "n_production_negative": 679,
+  "lexicon_agree_no_star_pct": 100.0,
+  "n_fp_candidates": 674,
+  "n_fn_candidates": 99,
+  "n_star_text_conflicts": 763,
+  "n_query_like_positives": 86,
+  "fp_mode_counts": [
+    [
+      "short_lexicon_positive",
+      421
+    ],
+    [
+      "substring_false_positive_in_query",
+      118
+    ],
+    [
+      "judge_disagreement_fp",
+      84
+    ],
+    [
+      "other_disagreement",
+      18
+    ],
+    [
+      "negation_or_sarcasm",
+      9
+    ],
+    [
+      "advice_marked_positive",
+      9
+    ],
+    [
+      "comparative_not_affective",
+      8
+    ],
+    [
+      "advice_recommendation+short_lexicon_positive",
+      5
+    ],
+    [
+      "query_marked_positive",
+      1
+    ],
+    [
+      "advice_recommendation",
+      1
+    ]
+  ],
+  "score_value_counts": [
+    [
+      0.4,
+      2568
+    ],
+    [
+      0.6,
+      941
+    ],
+    [
+      0.7,
+      129
+    ],
+    [
+      0.8,
+      4
+    ]
+  ]
+}

@@ -49,8 +49,8 @@ KPI_HELP = {
     "BRAC → SCB ref.": "Share of BRAC conversations that also name SCB. Typically much lower than SCB → BRAC, which means BRAC customers do not need SCB as a reference point.",
     "BRAC mean star": "Average app-store star rating for BRAC. Higher than SCB here means BRAC's app experience is winning the rating battle.",
     "SCB mean star": "Average app-store star rating for SCB. Lower than BRAC is a digital-experience weakness relative to the local competitor.",
-    "BRAC positive": "% of BRAC mentions labelled positive. Higher than SCB means BRAC is earning more goodwill in this filtered slice.",
-    "SCB positive": "% of SCB mentions labelled positive. Compare directly with BRAC positive — the gap shows who is winning the sentiment race.",
+    "BRAC positive": "% of BRAC mentions with positive *text* sentiment (model + policy). App-store stars are a separate metric (mean star / rating_sentiment) — they are not merged into this KPI.",
+    "SCB positive": "% of SCB mentions with positive *text* sentiment (model + policy). App-store stars are a separate metric (mean star / rating_sentiment) — they are not merged into this KPI.",
 }
 
 
@@ -1060,6 +1060,7 @@ with tab_data:
             "month_year",
             "language",
             "sentiment_final",
+            "rating_sentiment",
             "star_rating",
             "low_quality",
             "theme_app_ux",

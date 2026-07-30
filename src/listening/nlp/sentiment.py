@@ -1,9 +1,10 @@
-"""Multilingual sentiment analysis (local Hugging Face model + rating signal)."""
+"""Multilingual sentiment analysis (HF model + policy + parallel rating signal)."""
 
 from __future__ import annotations
 
 from typing import Any, Optional
 
+from listening.nlp.policy import apply_text_sentiment_policy, rating_sentiment_from_stars
 from listening.normalize.schema import rating_to_sentiment
 
 _PIPELINE = None
@@ -44,6 +45,7 @@ def _normalize_label(label: str) -> str:
 
 
 def predict_sentiment(text: str, model_name: str) -> tuple[str, float]:
+    """Raw model (or lexicon fallback) — policy applied in enrich_sentiment."""
     if not text or not text.strip():
         return "neutral", 0.0
     try:
@@ -53,7 +55,6 @@ def predict_sentiment(text: str, model_name: str) -> tuple[str, float]:
         score = float(out.get("score") or 0.0)
         return label, score
     except Exception:
-        # lightweight lexicon fallback if model download/runtime fails
         return _lexicon_sentiment(text)
 
 
@@ -75,20 +76,24 @@ def enrich_sentiment(
     model_name: str,
     use_rating_for_reviews: bool = True,
 ) -> list[dict[str, Any]]:
+    """Attach parallel text + rating sentiment. Never overwrite text with stars."""
     for r in records:
-        # always keep rating_sentiment for reviews
-        if r.get("rating") is not None:
-            r["rating_sentiment"] = rating_to_sentiment(r.get("rating"))
+        rating = r.get("rating")
+        if rating is not None:
+            r["rating_sentiment"] = rating_to_sentiment(rating)
+        else:
+            r["rating_sentiment"] = rating_sentiment_from_stars(r.get("star_rating"))
 
         text = r.get("text") or ""
-        label, score = predict_sentiment(text, model_name)
+        raw_label, raw_score = predict_sentiment(text, model_name)
+        label, score, policy_tag = apply_text_sentiment_policy(text, raw_label, raw_score)
         r["sentiment_label"] = label
         r["sentiment_score"] = round(score, 4)
+        r["sentiment_model_raw"] = raw_label
+        r["sentiment_policy"] = policy_tag
 
-        # For store reviews, keep model label but also note rating signal separately.
-        # Do not overwrite model label with stars (plan: parallel signal).
-        if use_rating_for_reviews and r.get("content_type") == "review" and r.get("rating_sentiment"):
-            r["sentiment_source"] = "model+rating"
+        if use_rating_for_reviews and r.get("rating_sentiment"):
+            r["sentiment_source"] = f"text+rating|{policy_tag}"
         else:
-            r["sentiment_source"] = "model"
+            r["sentiment_source"] = f"text|{policy_tag}"
     return records

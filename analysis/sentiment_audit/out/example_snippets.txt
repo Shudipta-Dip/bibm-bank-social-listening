@@ -1,0 +1,93 @@
+edge_n=49 fp=674 fn=99 star=763
+
+## substring_false_positive_in_query
+[facebook/mixed] prod=positive xlmr=neutral bn=neutral vader=neutral hits=ভালো
+১৫ লাখ fdr করব । | কোন ব্যাংকে সব মিলিয়ে ভালো হবে ?
+
+[facebook/mixed] prod=positive xlmr=neutral bn=neutral vader=neutral hits=ভালো
+student account এর জন্য কোনটা ভালো??  | (১)brac | (2)prime
+
+[facebook/mixed] prod=positive xlmr=neutral bn=neutral vader=neutral hits=ভালো
+4লাখ টাকা আছে হাতে। | কি করবো FDR নাকি সঞ্চয়পএ। কোনটা ভালো হবে। | আর Motijheel থাকি তাই, কোন ব্যাংক ভালো হবে জানাবেন।
+
+[facebook/mixed] prod=positive xlmr=neutral bn=neutral vader=positive hits=ভালো
+আমার BRAC Bank-এ একটি Savings Account আছে। অ্যাকাউন্টে গড়ে মাসে প্রায় ৳৫০,০০০ ট্রানজেকশন হয়। তবে আমার বর্তমানে কোনো Salary, Business Income বা FDR নেই। | আমি শিগগিরই বিদেশে (চীন) পড়তে যাচ্ছি, তাই ভবিষ্যতে আন্তর্জাতিক ব্যবহার ও Airport Lounge সুবিধার জন্য একটি Credit Card নিতে আগ্রহী। | আমার প্রশ্ন: | 
+
+
+## advice_marked_positive
+[google_play/mixed] prod=positive xlmr=neutral bn=neutral vader=positive hits=ভালো
+ভালো কিন্তু ইউজার নেইম প্রত্যেকবার লগ-ইন করার সময় প্রত্যেকবারই টাইপ করতে হয়, পাসওয়ার্ডের ক্ষেত্রেও তাই। এটা কি শুধু আমার App Astha তেই নাকি সবারই তাই করতে হয়। Auto Save বা গুগল মাই একাউন্টে পাসওয়ার্ড ম্যানেজারে সেইভ হয়ে থাকলে ভালো হতো। ধন্যবাদ।
+
+[google_play/bn] prod=positive xlmr=neutral bn=negative vader=positive hits=nan
+আস্থা অ্যাপে লগইন প্রক্রিয়া অনেক স্লো। এছাড়া, একটি অপশন থেকে অন্য অপশনে যেতে সময় বেশি লাগে। আশা করি, আপনারা অ্যাপটির পারফরম্যান্স উন্নয়নে প্রয়োজনীয় পদক্ষেপ গ্রহণ করবেন।❤
+
+[facebook/bn] prod=positive xlmr=negative bn=positive vader=neutral hits=ভালো
+আপনি চাইলে বাংলাদেশ ব্যাংকে অভিযোগ দিতে পারেন যে আমি তো অনেকদিন ইউজ করিনি তারপরও তারা সার্ভিস চার্জ নিচ্ছে।আমার জানামতে এটা বাংলাদেশ ব্যাংক সমর্থন করে না। সবচেয়ে ভালো হবে বাংলাদেশ ব্যাংকে অভিযোগ দেন তারপর দেখা যাক
+
+[facebook/bn] prod=positive xlmr=neutral bn=positive vader=neutral hits=ভালো
+তেমন কোন সুবিধা নাই। এরচেয়ে দেশি ভালো কিছু ব্যাংকের ডিজিটাল একাউন্ট আছে খুঁজে দেখতে পারেন সেগুলোতেই ভালো হবে।
+
+
+## negation_or_sarcasm
+[google_play/en] prod=positive xlmr=negative bn=skip vader=negative hits=good
+User interface is not so good. Remember login ID need to be add. No ad money option.
+
+[google_play/en] prod=positive xlmr=positive bn=skip vader=positive hits=good
+I am a long-time customer of BRAC Bank. I have been using BRAC Bank's Astha apps for a long time. I can do everything in the app like sending money, paying bills, turning DPS on and off. I am using it smoothly, I have not faced any problem. A very good app.
+
+[google_play/en] prod=positive xlmr=negative bn=skip vader=positive hits=good
+apps is good, but not working my phone.
+
+[google_play/en] prod=positive xlmr=positive bn=skip vader=positive hits=best
+One of the best (if not the best) banking apps in Bangladesh.
+
+
+## comparative_not_affective
+[facebook/mixed] prod=positive xlmr=neutral bn=positive vader=neutral hits=ভালো
+দীর্ঘ ২.৫ বছরের যাত্রা দেশের ১২টি ব্যাংকের সাথে। ব্যাংক ব্যবহারের নিয়ম জানলে খুবই স্বাচ্ছন্দ্যে ব্যবহারের একটা মাধ্যম হয়ে দাঁড়ায়। তবে কোনো ব্যাংকই পারফেক্ট না। | কোনো ব্যাংকে হয়তো এটিএম বেশি, কোনোটার অনলাইন সার্ভিস ভালো, কোনটার ফি কম বা কোনোটায় লিমিট বেশি। সবগুলাই মানুষের প্রয়োজন। | সর্বশেষ ইউসিব
+
+[google_play/en] prod=positive xlmr=positive bn=skip vader=positive hits=nan
+Compared to other banking applications this Brac Bank Astha application is way better and easier to use
+
+[google_play/en] prod=positive xlmr=negative bn=skip vader=positive hits=nan
+Please update your App interface, it looks bland compared to other SC apps.
+
+[facebook/mixed] prod=positive xlmr=neutral bn=positive vader=neutral hits=ভালো
+আপনার থেকে ফি নিবে মিনিমাম ১.৫%, এর থেকে ভালো হয় আপনি ATM withdraw করে নিলে।
+
+
+## short_lexicon_positive
+[app_store/en] prod=positive xlmr=positive bn=skip vader=positive hits=best
+Best | The best app ever in bd finace sector.
+
+[app_store/en] prod=positive xlmr=positive bn=skip vader=positive hits=best,helpful
+Best Banking App | Very easy to use and very helpful.
+
+[google_play/en] prod=positive xlmr=positive bn=skip vader=positive hits=good
+very good
+
+[google_play/en] prod=positive xlmr=positive bn=skip vader=positive hits=good
+Good Bank
+
+
+## FN sample
+[facebook/en] prod=neutral xlmr=positive vader=positive
+Abu Saeed Mamun | Congratulations Apa!!! | 1h
+[facebook/en] prod=neutral xlmr=positive vader=positive
+Nurun Nahar Begum, Chief Technology Officer (CTO), has been part of BRAC Bank's journey since its earliest days, helping build the technology foundation behind the bank… See more
+[facebook/mixed] prod=neutral xlmr=positive vader=neutral
+ডাচ-বাংলা ব্যাংকের এই এটিএমটা আজ যেন একদম নতুনের ছোঁয়ায় ভরা। | মনে হচ্ছে পুরো মেশিনটাই নতুন টাকা দিয়ে লোড করা!  | ঈদের সময় নতুন টাকার আলাদা একটা আনন্দ আছে— | গন্ধে, ছোঁয়ায়, অনুভূতিতে একদম স্পেশাল।  | ঈদ মানেই খুশি, আর নতুন টাকা সেই খুশিকে আরো একটু বাড়িয়ে দেয়। See less
+[facebook/mixed] prod=neutral xlmr=positive vader=positive
+Ami ekta premium account khulte chacchi | Ebl priority / standard chartered priority / city gem / ucb imperial | konta better hobe and keno? | note: amr kache initially 30 lakhs bdt er moto hobe but ei amount monthly maintain kora hobe na, amr 10-15 lakhs monthly maintain hobe.
+[facebook/en] prod=neutral xlmr=positive vader=positive
+A gift from Standard Chartered
+
+## star conflict: high star + xlmr negative
+[app_store] stars=4 prod=positive xlmr=negative lex=positive
+Updates everyday | The only con is it keeps updating everyday!! Which is pretty annoying. Other than that it’s quite good.
+[app_store] stars=4 prod=positive xlmr=negative lex=negative
+Beneficiary Add | I am few time try to add beneficiary for permanent used but same problem is short name always come message no space last character try to one digit number and one to ten characters not working money in or out ok one time send money.  | This is little problem apps user  | Apps developers 
+[google_play] stars=5 prod=positive xlmr=negative lex=positive
+Very good quality app, but the charges are high.
+[google_play] stars=4 prod=positive xlmr=negative lex=positive
+User interface is not so good. Remember login ID need to be add. No ad money option.

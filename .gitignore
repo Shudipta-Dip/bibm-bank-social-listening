@@ -29,3 +29,22 @@ reports/*.md
 *.png
 .DS_Store
 Thumbs.db
+
+# Vendor clones + audit caches (keep third_party/README.md)
+third_party/sentiment/**
+!third_party/README.md
+analysis/sentiment_audit/cache/**
+analysis/sentiment_audit/out/**
+!analysis/sentiment_audit/out/edge_cases_for_human.csv
+!analysis/sentiment_audit/out/edge_cases_for_human.xlsx
+!analysis/sentiment_audit/out/metrics_summary.csv
+!analysis/sentiment_audit/out/audit_stats.json
+!analysis/sentiment_audit/out/disagreement_matrix_production_vs_xlmr.csv
+!analysis/sentiment_audit/out/disagreement_matrix_production_vs_bn.csv
+!analysis/sentiment_audit/out/disagreement_matrix_production_vs_vader.csv
+!analysis/sentiment_audit/out/disagreement_matrix_production_vs_lexicon.csv
+!analysis/sentiment_audit/out/example_snippets.txt
+!analysis/sentiment_audit/out/false_positive_candidates.csv
+!analysis/sentiment_audit/out/false_negative_candidates.csv
+!analysis/sentiment_audit/out/star_vs_text_conflicts.csv
+
