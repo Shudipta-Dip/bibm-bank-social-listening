@@ -911,16 +911,18 @@ with tab_demo:
         f"""
 <div class="tile">
   {section_title("Segment talk vs branded scheme", "Compares how often people talk about a demographic need vs naming the bank's scheme (Agami, TARA, Student File, etc.). A large gap means the need is discussed but the branded offer is invisible. BRAC usually shows slightly more scheme recall (e.g. Agami) than SCB — but both banks leave most segment talk unbranded, so neither is converting need-talk into product awareness well.", "link")}
-  <p class="section-note">Faded = segment talk % of brand. Solid = % of that talk naming a scheme.</p>
+  <p class="section-note">Same scale (% of brand). Solid outer = segment talk · faded inner = those who also name a scheme (subset). Hover for counts.</p>
 </div>
 """,
-        unsafe_allow_html=True,
-    )
+            unsafe_allow_html=True,
+        )
     if not gap.empty:
         fig = go.Figure()
+        # Same-scale overlay: outer solid = segment talk % of brand;
+        # inner faded = scheme-namers % of brand (subset). Brands separated via offsetgroup.
         for brand, color, faded in [
-            ("BRAC Bank", BRAC, "rgba(0,108,181,0.28)"),
-            ("SCB Bangladesh", SCB, "rgba(56,210,0,0.28)"),
+            ("BRAC Bank", BRAC, "rgba(0,108,181,0.40)"),
+            ("SCB Bangladesh", SCB, "rgba(56,210,0,0.40)"),
         ]:
             sub = gap[gap["brand"] == brand]
             fig.add_trace(
@@ -928,22 +930,34 @@ with tab_demo:
                     name=f"{brand} · segment talk",
                     x=sub["segment"],
                     y=sub["demo_pct"],
-                    marker=dict(color=faded, line=dict(color=color, width=1.5)),
-                    customdata=sub[["demo_count", "n_base"]],
-                    hovertemplate="<b>%{x}</b><br>Segment %{y:.1f}% (n=%{customdata[0]})<extra>" + brand + "</extra>",
+                    offsetgroup=brand,
+                    marker=dict(color=color, line=dict(color=color, width=0)),
+                    customdata=sub[["demo_count", "n_base", "named_count"]],
+                    hovertemplate=(
+                        "<b>%{x}</b><br>Segment talk %{y:.1f}% of brand"
+                        " (n=%{customdata[0]} / %{customdata[1]})<br>"
+                        "Named a scheme: %{customdata[2]}"
+                        "<extra>" + brand + "</extra>"
+                    ),
                 )
             )
             fig.add_trace(
                 go.Bar(
                     name=f"{brand} · names scheme",
                     x=sub["segment"],
-                    y=sub["named_of_demo_pct"],
-                    marker=dict(color=color, line=dict(color=color, width=0)),
-                    customdata=sub[["named_count", "demo_count"]],
-                    hovertemplate="<b>%{x}</b><br>%{y:.0f}% name a scheme (%{customdata[0]}/%{customdata[1]})<extra>" + brand + "</extra>",
+                    y=sub["named_brand_pct"],
+                    offsetgroup=brand,
+                    width=0.35,
+                    marker=dict(color=faded, line=dict(color=color, width=1)),
+                    customdata=sub[["named_count", "demo_count", "named_of_demo_pct"]],
+                    hovertemplate=(
+                        "<b>%{x}</b><br>Names scheme %{y:.2f}% of brand"
+                        " (%{customdata[0]} of %{customdata[1]} segment · %{customdata[2]:.0f}% of segment)"
+                        "<extra>" + brand + "</extra>"
+                    ),
                 )
             )
-        fig.update_layout(barmode="group", yaxis_title="%")
+        fig.update_layout(barmode="overlay", yaxis_title="% of brand mentions")
         st.plotly_chart(fig_layout(fig, chart_height(460), mode), use_container_width=True)
 
 # =============================================================================

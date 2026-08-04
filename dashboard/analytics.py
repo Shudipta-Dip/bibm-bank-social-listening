@@ -558,6 +558,8 @@ def demographic_gap(df: pd.DataFrame) -> pd.DataFrame:
                     "demo_pct": demo_pct,
                     "named_count": named,
                     "named_of_demo_pct": named_pct,
+                    # Same scale as demo_pct (share of brand corpus) for overlay charts
+                    "named_brand_pct": 100 * named / n if n else 0.0,
                     "unnamed_count": demo_n - named,
                     "n_base": n,
                 }
