@@ -753,8 +753,8 @@ with tab_perf:
         st.markdown(
             f"""
 <div class="tile">
-  {section_title("Meaningfulness", "Scores how positively each theme is discussed for each bank (0–100). A bank ahead here owns that benefit in customers' minds. If BRAC leads prevalence but SCB leads meaningfulness, BRAC gets more talk while SCB gets better talk — or vice versa. High talk with a low score is a warning, not a win.", "sentiment")}
-  <p class="section-note">Positive themed mentions per 100 filtered rows.</p>
+  {section_title("Meaningfulness", "Of all mentions tagged with a theme, what share is positive? This is praise quality within the theme — not how common the theme is. Compare with Theme prevalence: a bank can lead App/UX volume yet trail on % positive App/UX, which means more talk is complaint, not preference.", "sentiment")}
+  <p class="section-note">% positive among theme-tagged mentions (positive count ÷ theme count). Hover for both counts.</p>
 </div>
 """,
             unsafe_allow_html=True,
@@ -763,29 +763,28 @@ with tab_perf:
             fig = px.bar(
                 mean_df,
                 x="theme",
-                y="per_100",
+                y="pct_positive",
                 color="brand",
                 barmode="group",
                 color_discrete_map=brand_color_map(),
-                custom_data=["pos_count", "n_base"],
-                labels={"per_100": "Per 100 rows", "theme": ""},
+                custom_data=["pos_count", "theme_count"],
+                labels={"pct_positive": "% positive within theme", "theme": ""},
             )
             fig.update_traces(
-                hovertemplate="<b>%{x}</b><br>%{y:.1f}/100 · n=%{customdata[0]}<extra>%{fullData.name}</extra>"
+                hovertemplate="<b>%{x}</b><br>%{y:.1f}% positive (%{customdata[0]} of %{customdata[1]})<extra>%{fullData.name}</extra>"
             )
             st.plotly_chart(fig_layout(fig, chart_height(340), mode), use_container_width=True)
 
 # =============================================================================
 with tab_pos:
-    pop_df = A.pop_pod_table(df)
-    pops, pods = A.identify_pops_pods(pop_df)
-
     diff = A.differentiation_index(df)
+    pos_diff = A.positive_differentiation_index(df)
+
     st.markdown(
         f"""
 <div class="tile tile-span-12" style="margin-bottom:var(--gap)">
-  {section_title("Differentiation index", "Ranks themes by how uneven BRAC vs SCB talk is. Large gaps mean one bank owns that topic in conversation. BRAC usually pulls ahead on mass-market and accessibility themes; SCB on premium/international cues when they appear. Confirm the winner's sentiment in Identified PODs — owning a complaint theme is not an advantage.", "link")}
-  <p class="section-note">Prevalence gap (BRAC % − SCB %). Brand-colored bars indicate the bank discussed more on each theme.</p>
+  {section_title("Differentiation index (prevalence)", "How uneven total theme talk is between BRAC and SCB. A large gap means one bank is discussed more on that topic — volume ownership only. Pair with the positive differentiation chart below: leading volume does not mean leading preference.", "link")}
+  <p class="section-note">Prevalence gap (BRAC % − SCB %) of all theme-tagged mentions. Brand-colored bars = who has more talk.</p>
 </div>
 """,
         unsafe_allow_html=True,
@@ -800,7 +799,7 @@ with tab_pos:
                 marker_color=colors,
                 customdata=diff[["brac_pct", "scb_pct", "brac_count", "scb_count", "leader"]],
                 hovertemplate=(
-                    "<b>%{y}</b><br>Gap %{x:.1f}pp<br>"
+                    "<b>%{y}</b><br>Prevalence gap %{x:.1f}pp<br>"
                     "BRAC %{customdata[0]:.1f}% (n=%{customdata[2]})<br>"
                     "SCB %{customdata[1]:.1f}% (n=%{customdata[3]})<extra></extra>"
                 ),
@@ -810,127 +809,34 @@ with tab_pos:
         fig.update_layout(xaxis_title="pp gap (BRAC − SCB)", showlegend=False)
         st.plotly_chart(fig_layout(fig, chart_height(360), mode), use_container_width=True)
 
-    p1, p2 = st.columns(2, gap="small")
-    with p1:
-        st.markdown(
-            f"""
-<div class="tile">
-  {section_title("Identified PODs", "After text-sentiment reclassification, the main volume leaders are complaint-driven, not brand wins. BRAC leads App/UX talk but with deep net-negative sentiment (still less severe than SCB). SCB leads Cards and Fees volume, yet both themes are now net negative for both banks — so SCB is associated with fee/card friction more than it owns a positive POD. Treat red volume leaders as liabilities to fix, not differentiation to claim.", "star")}
-  <p class="section-note">Themes with ≥3pp prevalence gap. Labels show net sentiment (pp).</p>
+    st.markdown(
+        f"""
+<div class="tile tile-span-12" style="margin-bottom:var(--gap)">
+  {section_title("Differentiation index (positive only)", "Same gap idea, but only positive theme mentions as a share of each bank’s corpus. If BRAC leads prevalence on App/UX but trails (or barely leads) here, the extra talk is not preference — it is often complaint. This is the chart that separates volume differentiation from perceived preference.", "star")}
+  <p class="section-note">Gap in % of brand rows that are positive ∩ theme (BRAC − SCB). Hover for positive counts.</p>
 </div>
 """,
-            unsafe_allow_html=True,
-        )
-        if pods.empty:
-            st.info("No clear PODs under current filters.")
-        else:
-            long = []
-            for _, r in pods.iterrows():
-                long.append(
-                    {
-                        "theme": r["theme"],
-                        "brand": "BRAC Bank",
-                        "pct": r["brac_prevalence"],
-                        "count": r["brac_count"],
-                        "net": r["brac_net"],
-                        "quality": r["pod_quality"],
-                    }
-                )
-                long.append(
-                    {
-                        "theme": r["theme"],
-                        "brand": "SCB Bangladesh",
-                        "pct": r["scb_prevalence"],
-                        "count": r["scb_count"],
-                        "net": r["scb_net"],
-                        "quality": r["pod_quality"],
-                    }
-                )
-            long_df = pd.DataFrame(long)
-            fig = px.bar(
-                long_df,
-                x="theme",
-                y="pct",
-                color="brand",
-                barmode="group",
-                color_discrete_map=brand_color_map(),
-                custom_data=["count", "net", "quality"],
-                labels={"pct": "Prevalence %", "theme": ""},
-                text=long_df["net"].map(lambda x: f"{x:+.0f}"),
-            )
-            fig.update_traces(
-                textposition="outside",
-                textfont_size=11,
-                hovertemplate="<b>%{x}</b><br>%{y:.1f}% (n=%{customdata[0]}) · net %{customdata[1]:+.0f}pp<br>%{customdata[2]}<extra>%{fullData.name}</extra>",
-            )
-            st.plotly_chart(fig_layout(fig, chart_height(340), mode), use_container_width=True)
-            st.dataframe(
-                pods[
-                    ["theme", "volume_leader", "pod_quality", "brac_prevalence", "scb_prevalence", "brac_net", "scb_net"]
-                ].rename(
-                    columns={
-                        "volume_leader": "Volume leader",
-                        "pod_quality": "POD quality",
-                        "brac_prevalence": "BRAC %",
-                        "scb_prevalence": "SCB %",
-                        "brac_net": "BRAC net",
-                        "scb_net": "SCB net",
-                    }
+        unsafe_allow_html=True,
+    )
+    if not pos_diff.empty:
+        colors = [BRAC if gap > 0 else SCB for gap in pos_diff["gap"]]
+        fig = go.Figure(
+            go.Bar(
+                x=pos_diff["gap"],
+                y=pos_diff["theme"],
+                orientation="h",
+                marker_color=colors,
+                customdata=pos_diff[["brac_pct", "scb_pct", "brac_count", "scb_count", "leader"]],
+                hovertemplate=(
+                    "<b>%{y}</b><br>Positive-share gap %{x:.1f}pp<br>"
+                    "BRAC %{customdata[0]:.1f}% (pos n=%{customdata[2]})<br>"
+                    "SCB %{customdata[1]:.1f}% (pos n=%{customdata[3]})<extra></extra>"
                 ),
-                hide_index=True,
-                use_container_width=True,
             )
-
-    with p2:
-        st.markdown(
-            f"""
-<div class="tile">
-  {section_title("Clarified POP table", "Table-stakes themes both banks must get right (service, trust, digital basics). The bank with the better net-sentiment edge is delivering that shared expectation more credibly. If SCB trails BRAC on a POP, SCB is losing on a category must-have, not a niche feature.", "link")}
-  <p class="section-note">Similar prevalence (≤2pp). <b>Net pp = % positive − % negative</b>.</p>
-</div>
-""",
-            unsafe_allow_html=True,
         )
-        if pops.empty:
-            st.info("No POP candidates under current filters.")
-        else:
-            pop_themes = pops["theme"].tolist()
-            fig = go.Figure()
-            for brand, color in brand_color_map().items():
-                sub = pop_df[(pop_df["brand"] == brand) & (pop_df["theme"].isin(pop_themes))]
-                fig.add_trace(
-                    go.Bar(
-                        name=brand,
-                        x=sub["theme"],
-                        y=sub["prevalence"],
-                        marker_color=color,
-                        customdata=sub[["count", "net", "pos_pct", "neg_pct"]],
-                        hovertemplate=(
-                            "<b>%{x}</b><br>Prevalence %{y:.1f}% (n=%{customdata[0]})<br>"
-                            "Net %{customdata[1]:+.0f}pp (pos %{customdata[2]:.0f}% / neg %{customdata[3]:.0f}%)"
-                            "<extra>" + brand + "</extra>"
-                        ),
-                    )
-                )
-            fig.update_layout(barmode="group", yaxis_title="Prevalence %")
-            st.plotly_chart(fig_layout(fig, chart_height(340), mode), use_container_width=True)
-            display = pops.copy()
-            display["BRAC net"] = display["brac_net"].map(lambda x: f"{x:+.0f}")
-            display["SCB net"] = display["scb_net"].map(lambda x: f"{x:+.0f}")
-            st.dataframe(
-                display[
-                    ["theme", "brac_prevalence", "scb_prevalence", "BRAC net", "SCB net", "quality_edge"]
-                ].rename(
-                    columns={
-                        "theme": "Theme",
-                        "brac_prevalence": "BRAC %",
-                        "scb_prevalence": "SCB %",
-                        "quality_edge": "Sentiment edge",
-                    }
-                ),
-                hide_index=True,
-                use_container_width=True,
-            )
+        fig.add_vline(x=0, line_width=1, line_color=BRAC_SILVER)
+        fig.update_layout(xaxis_title="pp gap in positive theme share (BRAC − SCB)", showlegend=False)
+        st.plotly_chart(fig_layout(fig, chart_height(360), mode), use_container_width=True)
 
 # =============================================================================
 with tab_touch:

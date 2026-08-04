@@ -241,21 +241,21 @@ def theme_prevalence(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def meaningfulness(df: pd.DataFrame) -> pd.DataFrame:
+    """% of theme-tagged mentions that are positive (within-theme praise rate)."""
     rows = []
     for brand, g in df.groupby("brand_label"):
-        n = len(g)
-        if n == 0:
-            continue
         for theme in THEMES:
             themed = g[g[theme]]
-            pos = themed[themed["sentiment_final"] == "positive"]
+            nt = len(themed)
+            pos_n = int((themed["sentiment_final"] == "positive").sum()) if nt else 0
             rows.append(
                 {
                     "brand": brand,
                     "theme": THEME_LABELS[theme],
-                    "pos_count": len(pos),
-                    "per_100": 100 * len(pos) / n,
-                    "n_base": n,
+                    "pos_count": pos_n,
+                    "theme_count": nt,
+                    "pct_positive": 100 * pos_n / nt if nt else 0.0,
+                    "n_base": len(g),
                 }
             )
     return pd.DataFrame(rows)
@@ -270,10 +270,52 @@ def differentiation_index(df: pd.DataFrame) -> pd.DataFrame:
     brands = list(pivot.columns)
     if len(brands) < 2:
         return pd.DataFrame()
-    b0, b1 = brands[0], brands[1]
     # Prefer BRAC - SCB ordering if both present
     if "BRAC Bank" in brands and "SCB Bangladesh" in brands:
-        b0, b1 = "BRAC Bank", "SCB Bangladesh"
+        pass  # explicit columns below
+    out = pd.DataFrame(
+        {
+            "theme": pivot.index,
+            "brac_pct": pivot.get("BRAC Bank", pd.Series(0, index=pivot.index)),
+            "scb_pct": pivot.get("SCB Bangladesh", pd.Series(0, index=pivot.index)),
+            "brac_count": count_pivot.get("BRAC Bank", pd.Series(0, index=pivot.index)),
+            "scb_count": count_pivot.get("SCB Bangladesh", pd.Series(0, index=pivot.index)),
+        }
+    )
+    out["gap"] = out["brac_pct"] - out["scb_pct"]
+    out["leader"] = out["gap"].apply(lambda x: "BRAC Bank" if x > 0 else ("SCB Bangladesh" if x < 0 else "Tie"))
+    return out.sort_values("gap")
+
+
+def positive_differentiation_index(df: pd.DataFrame) -> pd.DataFrame:
+    """Gap in share of brand rows that are positive ∩ theme (BRAC − SCB).
+
+    Parallel to prevalence differentiation, but only praise-tagged theme talk —
+    so a bank can lead volume yet trail on positive differentiation.
+    """
+    rows = []
+    for brand, g in df.groupby("brand_label"):
+        n = len(g)
+        if n == 0:
+            continue
+        for theme in THEMES:
+            themed = g[g[theme]]
+            pos_n = int((themed["sentiment_final"] == "positive").sum()) if len(themed) else 0
+            rows.append(
+                {
+                    "brand": brand,
+                    "theme": THEME_LABELS[theme],
+                    "pos_count": pos_n,
+                    "theme_count": len(themed),
+                    "pct": 100 * pos_n / n,
+                    "n_base": n,
+                }
+            )
+    long = pd.DataFrame(rows)
+    if long.empty:
+        return long
+    pivot = long.pivot(index="theme", columns="brand", values="pct").fillna(0)
+    count_pivot = long.pivot(index="theme", columns="brand", values="pos_count").fillna(0)
     out = pd.DataFrame(
         {
             "theme": pivot.index,
