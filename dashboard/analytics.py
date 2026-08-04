@@ -83,12 +83,46 @@ DEMO_PATTERNS = {
         r"for\s+women",
         r"women[\s\-]?owned",
     ],
+    # Broad cues only — brand-specific filters applied in match_demo for these.
+    "priority_premium": [
+        r"\bpriority\s+(account|banking|card|customer|holder|centre|center)\b",
+        r"\bpriority\s+banking\b",
+        r"scb\s+priority",
+        r"standard\s+chartered\s+priority",
+        r"chartered\s+priority",
+        r"premium\s+(account|banking)",
+        r"super\s+saver\s+premium",
+        r"প্রাইওরিটি",
+        r"প্রিমিয়াম\s+(অ্যাকাউন্ট|একাউন্ট|ব্যাংকিং)",
+    ],
+    "salary_payroll": [
+        r"salary\s+account",
+        r"payroll",
+        r"employee\s+banking",
+        r"স্যালারি\s*অ্যাকাউন্ট",
+        r"স্যালারি\s*একাউন্ট",
+    ],
+    "nrb": [
+        r"probashi",
+        r"প্রবাসী",
+        r"swadeshi",
+        r"স্বদেশী",
+        r"non[\s\-]?resident\s+bangladeshi",
+        r"non[\s\-]?resident",
+        r"\bnrt\b",
+        r"\bnrx\b",
+        r"\bnfcd\b",
+        r"fcy\s+account",
+    ],
 }
 DEMO_BN = {
     "students": ["ছাত্র", "ছাত্রী", "স্টুডেন্ট"],
     "freelancers": ["ফ্রিল্যান্সার", "ফ্রিল্যান্সিং"],
     "sme": ["ক্ষুদ্র ব্যবসা"],
     "women": ["নারী উদ্যোক্তা", "মহিলা উদ্যোক্তা"],
+    "priority_premium": [],
+    "salary_payroll": [],
+    "nrb": ["প্রবাসী"],
 }
 
 SCHEME_PATTERNS = {
@@ -117,6 +151,58 @@ SCHEME_PATTERNS = {
     "SCB Student File": [r"student\s+file", r"right\s+start"],
     "SCB Saadiq Graduate": [r"saadiq\s+graduate", r"saadiq", r"graduate\s+account"],
     "SCB Orjon (women SME)": [r"(?<!\w)orjon(?!\w)", r"orjon[\s\-]?bil"],
+    # Priority / premium (no UCB Imperial)
+    "SCB Priority Banking": [
+        r"scb\s+priority",
+        r"standard\s+chartered\s+priority",
+        r"chartered\s+priority",
+        r"priority\s+banking",
+        r"priority\s+account",
+        r"priority\s+card",
+        r"priority\s+customer",
+        r"priority\s+holder",
+    ],
+    "SCB Super Saver Premium": [r"super\s+saver\s+premium", r"supersaver\s+premium"],
+    "BRAC Premium Banking": [r"brac.{0,20}premium\s+banking", r"premium\s+banking.{0,20}brac"],
+    # Salary / employee banking
+    "BRAC Salary / Employee Banking": [
+        r"brac.{0,40}salary\s+account",
+        r"salary\s+account.{0,40}brac",
+        r"ব্র্যাক.{0,30}স্যালারি\s*(অ্যাকাউন্ট|একাউন্ট)",
+        r"ব্রাক.{0,30}স্যালারি\s*(অ্যাকাউন্ট|একাউন্ট)",
+        r"স্যালারি\s*(অ্যাকাউন্ট|একাউন্ট).{0,30}ব্র্যাক",
+        r"স্যালারি\s*(অ্যাকাউন্ট|একাউন্ট).{0,30}ব্রাক",
+        r"brac.{0,30}employee\s+banking",
+        r"employee\s+banking.{0,30}brac",
+        r"(?<!\w)corpnet(?!\w)",
+    ],
+    "SCB Salary / Employee Banking": [
+        r"scb.{0,80}salary\s+account",
+        r"salary\s+account.{0,80}(scb|standard\s+chartered)",
+        r"standard\s+chartered.{0,80}salary\s+account",
+        # Same-post brand + Bengali product name (can be far apart in long posts)
+        r"(?:scb|standard\s+chartered)[\s\S]{0,250}স্যালারি\s*(?:অ্যাকাউন্ট|একাউন্ট)",
+        r"স্যালারি\s*(?:অ্যাকাউন্ট|একাউন্ট)[\s\S]{0,250}(?:scb|standard\s+chartered)",
+        r"(scb|standard\s+chartered).{0,30}employee\s+banking",
+        r"employee\s+banking.{0,30}(scb|standard\s+chartered)",
+        r"payroll\s+account",
+        r"employee\s+banking\s+value\s+pack",
+    ],
+    # NRB
+    "BRAC Probashi": [
+        r"probashi",
+        r"প্রবাসী",
+        r"tara\s+probashi",
+        r"probashi\s+poribar",
+        r"প্রবাসী\s*পরিবার",
+        r"brac.{0,15}(nfcd|fcy\s+account)",
+    ],
+    "SCB Swadeshi": [
+        r"swadeshi",
+        r"স্বদেশী",
+        r"scb.{0,15}(nrt|nrx|jtr)",
+        r"standard\s+chartered.{0,20}(nrb|swadeshi|স্বদেশী)",
+    ],
 }
 
 SCHEME_TO_DEMO = {
@@ -127,6 +213,24 @@ SCHEME_TO_DEMO = {
     "SCB Student File": "students",
     "SCB Saadiq Graduate": "students",
     "SCB Orjon (women SME)": "women",
+    "SCB Priority Banking": "priority_premium",
+    "SCB Super Saver Premium": "priority_premium",
+    "BRAC Premium Banking": "priority_premium",
+    "BRAC Salary / Employee Banking": "salary_payroll",
+    "SCB Salary / Employee Banking": "salary_payroll",
+    "BRAC Probashi": "nrb",
+    "SCB Swadeshi": "nrb",
+}
+
+# Display labels for demographic_gap chart axis
+DEMO_LABELS = {
+    "students": "Students",
+    "freelancers": "Freelancers",
+    "women": "Women",
+    "sme": "SME",
+    "priority_premium": "Priority / premium",
+    "salary_payroll": "Salary / payroll",
+    "nrb": "NRB / non-resident",
 }
 
 
@@ -188,7 +292,212 @@ def find_banks(text: str, exclude: set[str] | None = None) -> set[str]:
     return found
 
 
-def match_demo(text: str, demo: str) -> bool:
+_BRAC_CUE = r"(?<!\w)brac(?!\w)|ব্র্যাক|ব্রাক\s*ব্যাংক"
+_SCB_CUE = r"(?<!\w)scb(?!\w)|standard\s+chartered|স্ট্যান্ডার্ড\s*চার্টার্ড"
+_OTHER_BANK = (
+    r"(?:dbbl|dutch[\s\-]?bangla|rocket|nagad|bkash|bikash|pubali|mtb|"
+    r"mutual\s+trust|city\s+bank|ebl|eastern\s+bank|ucb|islami|ibbl|"
+    r"prime\s+bank|sonali|janata|agrani|bank\s+asia|midland|meghna|"
+    r"southeast|jamuna|ncc|trust\s+bank|one\s+bank)"
+)
+_SALARY_PRODUCT = (
+    r"(?:salary\s+account|payroll(?:\s+account)?|employee\s+banking|"
+    r"স্যালারি\s*(?:অ্যাকাউন্ট|একাউন্ট))"
+)
+
+
+def _brand_cue(brand: str) -> str:
+    return _BRAC_CUE if brand == "BRAC Bank" else _SCB_CUE
+
+
+def _match_priority_premium(text: str, brand: str | None = None) -> bool:
+    """Affluent / Priority Banking talk — not bug-report 'priority' or UCB Imperial alone."""
+    if re.search(
+        r"high(?:est)?\s+priority|fix\s+(?:as\s+)?(?:a\s+)?priority|"
+        r"priority\s+pass|premium\s+subscription|priority\s+to\s+"
+        r"(?:millionaire|rich|vip)|give\s+priority\s+to",
+        text,
+        re.I,
+    ):
+        return False
+    if not _match_any(text, DEMO_PATTERNS["priority_premium"]):
+        # Bare "imperial" is UCB's scheme — never a cue by itself
+        return False
+    if brand:
+        brand_pat = _brand_cue(brand)
+        has_brand = bool(re.search(brand_pat, text, re.I))
+        # Product cues that are not competitor-only "premium banking" rants
+        has_own_product = bool(
+            re.search(
+                r"priority\s+(?:account|banking|card|customer|holder|centre|center)|"
+                r"premium\s+account|super\s+saver\s+premium|"
+                r"scb\s+priority|standard\s+chartered\s+priority|chartered\s+priority",
+                text,
+                re.I,
+            )
+        )
+        # EBL/City/UCB premium banking complaint with no focal priority product
+        if (
+            re.search(r"\bebl\b|eastern\s+bank|city\s+gem|\bucb\b", text, re.I)
+            and not has_brand
+            and not has_own_product
+        ):
+            return False
+    return True
+
+
+def _match_salary_payroll(text: str, brand: str) -> bool:
+    """
+    Count only when salary/payroll is about using the focal bank
+    (not income-for-CC, not salary at another bank with transfer to focal).
+    """
+    brand_pat = _brand_cue(brand)
+
+    # Rocket / MFS salary-account promo, non-salaried card talk
+    if re.search(
+        r"(?:রকেট|rocket).{0,60}স্যালারি\s*(?:অ্যাকাউন্ট|একাউন্ট)|"
+        r"non[\s\-]?salaried|নন[\s\-]?স্যালারি",
+        text,
+        re.I,
+    ):
+        return False
+
+    # Other bank clearly the salary home
+    other_salary = bool(
+        re.search(
+            rf"(?:{_OTHER_BANK}).{{0,50}}(?:{_SALARY_PRODUCT}|salary|স্যালারি)|"
+            rf"(?:{_SALARY_PRODUCT}|salary|স্যালারি).{{0,50}}(?:{_OTHER_BANK})",
+            text,
+            re.I,
+        )
+    )
+    # Focal brand as salary / payroll bank
+    focal_salary = bool(
+        re.search(
+            rf"(?:{brand_pat}).{{0,55}}(?:{_SALARY_PRODUCT}|"
+            r"salary\s+(?:is\s+)?(?:credited|credited\s+in|received)|"
+            r"(?:salary|স্যালারি).{0,20}(?:ঢুক|credited|হয়|hoy|account)|"
+            r"receiving.{0,40}salary|"
+            r"salary.{0,25}receiv)"
+            rf"|(?:{_SALARY_PRODUCT}).{{0,55}}(?:{brand_pat})"
+            rf"|(?:salary\s+account|স্যালারি\s*(?:অ্যাকাউন্ট|একাউন্ট))"
+            rf".{{0,40}}(?:is\s+on|on|at|এ)\s*(?:{brand_pat})"
+            rf"|(?:{brand_pat}).{{0,40}}(?:এ|e)\s*(?:salary|স্যালারি)"
+            rf"|ey\s+bank\s+e\s+salary",
+            text,
+            re.I,
+        )
+    ) or (
+        bool(
+            re.search(
+                rf"(?:receiving|receive).{{0,50}}(?:in\s+)?(?:{brand_pat})",
+                text,
+                re.I,
+            )
+        )
+        and bool(re.search(r"salary|স্যালারি", text, re.I))
+    )
+    generic_product = bool(re.search(_SALARY_PRODUCT, text, re.I))
+
+    if focal_salary:
+        return True
+    if other_salary:
+        return False
+
+    # Income-only profiles ("Salary: 100k", "স্যালারি 50k") for CC shopping
+    if re.search(
+        r"(?:monthly\s+)?salary\s*[:：]|স্যালারি\s*[:：]?\s*\d|"
+        r"salary\s+(?:around\s+)?[\d,]+\s*k\b|"
+        r"profession.{0,40}salary",
+        text,
+        re.I,
+    ) and not generic_product:
+        return False
+
+    # Generic "use the bank where salary is credited" with no focal product link
+    if re.search(
+        r"bank\s+in\s+which\s+your\s+salary|salary\s+is\s+credited\s*!",
+        text,
+        re.I,
+    ):
+        return False
+
+    # Brand-scoped thread: salary-account / payroll product talk, and no
+    # other bank claimed as the salary home
+    if generic_product and not other_salary:
+        return True
+    return False
+
+
+def _match_nrb(text: str, brand: str | None = None) -> bool:
+    """NRB / Probashi / Swadeshi — not NRB Commercial Bank card lists."""
+    if re.search(
+        r"\bnrb\s+bank\b|\bnrbc\b|"
+        r"(?:used\s+card|cards?\s*:|কার্ড).{0,80}\bnrb\b|"
+        r"\bnrb\b.{0,40}(?:card|কার্ড)|"
+        r"(?:ucb|dbbl|ebl|mtb|prime).{0,30}\bnrb\b|"
+        r"\bnrb\b.{0,30}(?:ucb|dbbl|ebl|mtb|prime)",
+        text,
+        re.I,
+    ):
+        # Still allow if clear Probashi / non-resident / Swadeshi product talk
+        if not re.search(
+            r"probashi|প্রবাসী|swadeshi|স্বদেশী|"
+            r"non[\s\-]?resident|nrb\s+account|প্রবাস\s",
+            text,
+            re.I,
+        ):
+            return False
+    if re.search(r"\bnrb\b", text) and not re.search(
+        r"nrb\s+account|nrb\s+banking|non[\s\-]?resident|"
+        r"probashi|প্রবাসী|swadeshi|স্বদেশী",
+        text,
+        re.I,
+    ):
+        # Bare NRB usually = NRB Commercial Bank in this corpus
+        return False
+    if not (
+        _match_any(text, DEMO_PATTERNS["nrb"])
+        or any(bn in text for bn in DEMO_BN.get("nrb", []))
+    ):
+        return False
+    # Don't attribute competitor NRB-product talk to the focal brand bar
+    if brand == "SCB Bangladesh":
+        about_brac_probashi = bool(
+            re.search(r"probashi|প্রবাসী", text, re.I)
+            and re.search(r"(?<!\w)brac(?!\w)|ব্র্যাক|ব্রাক", text, re.I)
+        )
+        about_scb_nrb = bool(
+            re.search(
+                r"swadeshi|স্বদেশী|"
+                r"(?:scb|standard\s+chartered).{0,25}(?:nrb|nrt|nrx|jtr|swadeshi)|"
+                r"non[\s\-]?resident",
+                text,
+                re.I,
+            )
+        )
+        if about_brac_probashi and not about_scb_nrb:
+            return False
+    if brand == "BRAC Bank":
+        about_scb_only = bool(
+            re.search(r"swadeshi|স্বদেশী", text, re.I)
+            and re.search(r"(?<!\w)scb(?!\w)|standard\s+chartered", text, re.I)
+            and not re.search(r"probashi|প্রবাসী|(?<!\w)brac(?!\w)|ব্র্যাক", text, re.I)
+        )
+        if about_scb_only:
+            return False
+    return True
+
+
+def match_demo(text: str, demo: str, brand: str | None = None) -> bool:
+    if demo == "priority_premium":
+        return _match_priority_premium(text, brand)
+    if demo == "salary_payroll":
+        if brand is None:
+            return bool(re.search(_SALARY_PRODUCT, text, re.I))
+        return _match_salary_payroll(text, brand)
+    if demo == "nrb":
+        return _match_nrb(text, brand)
     if _match_any(text, DEMO_PATTERNS[demo]):
         return True
     return any(bn in text for bn in DEMO_BN.get(demo, []))
@@ -525,17 +834,33 @@ def scheme_awareness(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def demographic_gap(df: pd.DataFrame) -> pd.DataFrame:
+    # Named-scheme bars use the focal bank's products only (not competitor names).
     scheme_map = {
-        "students": ["BRAC Agami (student)", "SCB Student File", "SCB Saadiq Graduate"],
-        "freelancers": ["BRAC Matrix (freelancer)", "SCB Freelancer Account"],
-        "women": ["BRAC TARA (women)", "SCB Orjon (women SME)"],
-        "sme": ["BRAC TARA (women)", "SCB Orjon (women SME)"],
+        "BRAC Bank": {
+            "students": ["BRAC Agami (student)"],
+            "freelancers": ["BRAC Matrix (freelancer)"],
+            "women": ["BRAC TARA (women)"],
+            "sme": ["BRAC TARA (women)"],
+            "priority_premium": ["BRAC Premium Banking"],
+            "salary_payroll": ["BRAC Salary / Employee Banking"],
+            "nrb": ["BRAC Probashi"],
+        },
+        "SCB Bangladesh": {
+            "students": ["SCB Student File", "SCB Saadiq Graduate"],
+            "freelancers": ["SCB Freelancer Account"],
+            "women": ["SCB Orjon (women SME)"],
+            "sme": ["SCB Orjon (women SME)"],
+            "priority_premium": ["SCB Priority Banking", "SCB Super Saver Premium"],
+            "salary_payroll": ["SCB Salary / Employee Banking"],
+            "nrb": ["SCB Swadeshi"],
+        },
     }
     rows = []
     for brand, g in df.groupby("brand_label"):
         n = len(g)
-        for demo, schemes in scheme_map.items():
-            demo_mask = g["text_l"].apply(lambda t: match_demo(t, demo))
+        brand_schemes = scheme_map.get(brand, {})
+        for demo, schemes in brand_schemes.items():
+            demo_mask = g["text_l"].apply(lambda t, d=demo, b=brand: match_demo(t, d, b))
             demo_n = int(demo_mask.sum())
             if demo_n == 0:
                 named = 0
@@ -553,7 +878,7 @@ def demographic_gap(df: pd.DataFrame) -> pd.DataFrame:
             rows.append(
                 {
                     "brand": brand,
-                    "segment": demo.title(),
+                    "segment": DEMO_LABELS.get(demo, demo.replace("_", " ").title()),
                     "demo_count": demo_n,
                     "demo_pct": demo_pct,
                     "named_count": named,

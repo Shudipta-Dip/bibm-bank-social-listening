@@ -910,7 +910,7 @@ with tab_demo:
     st.markdown(
         f"""
 <div class="tile">
-  {section_title("Segment talk vs branded scheme", "Compares how often people talk about a demographic need vs naming the bank's scheme (Agami, TARA, Student File, etc.). A large gap means the need is discussed but the branded offer is invisible. BRAC usually shows slightly more scheme recall (e.g. Agami) than SCB — but both banks leave most segment talk unbranded, so neither is converting need-talk into product awareness well.", "link")}
+  {section_title("Segment talk vs branded scheme", "Compares how often people talk about a demographic need vs naming the bank's scheme (Agami, TARA, Priority, Probashi/Swadeshi, salary account, etc.). A large gap means the need is discussed but the branded offer is invisible. Salary/payroll only counts when the focal bank is the salary home — not income-for-CC profiles or salary at another bank. Priority excludes UCB Imperial and bug-report 'priority'. NRB excludes NRB Commercial Bank card lists.", "link")}
   <p class="section-note">Same scale (% of brand). Faded outer bar = all segment talk · solid inner bar = those who also name a scheme (subset). Hover for absolute counts.</p>
 </div>
 """,
