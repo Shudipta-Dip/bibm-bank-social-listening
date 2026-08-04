@@ -426,6 +426,7 @@ def phygital_net(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def monthly_app_ux_positivity(df: pd.DataFrame) -> pd.DataFrame:
+    """Monthly App/UX positive and negative shares (of App/UX-tagged rows)."""
     themed = df[df["theme_app_ux"] & df["month_year"].notna()].copy()
     if themed.empty:
         return pd.DataFrame()
@@ -433,9 +434,17 @@ def monthly_app_ux_positivity(df: pd.DataFrame) -> pd.DataFrame:
     for (brand, month), g in themed.groupby(["brand_label", "month_year"]):
         n = len(g)
         pos = 100 * (g["sentiment_final"] == "positive").sum() / n
-        rows.append({"brand": brand, "month": month, "pos_pct": pos, "count": n})
-    out = pd.DataFrame(rows).sort_values("month")
-    return out
+        neg = 100 * (g["sentiment_final"] == "negative").sum() / n
+        rows.append(
+            {
+                "brand": brand,
+                "month": month,
+                "pos_pct": pos,
+                "neg_pct": neg,
+                "count": n,
+            }
+        )
+    return pd.DataFrame(rows).sort_values("month")
 
 
 def salience_reference(df: pd.DataFrame) -> pd.DataFrame:

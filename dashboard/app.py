@@ -855,65 +855,54 @@ with tab_pos:
 
 # =============================================================================
 with tab_touch:
-    phy = A.phygital_net(df)
     monthly = A.monthly_app_ux_positivity(df)
-    t1, t2 = st.columns(2, gap="small")
-    with t1:
-        st.markdown(
-            f"""
+    st.markdown(
+        f"""
 <div class="tile">
-  {section_title("Sentiment net by touchpoint", "With corrected text sentiment, both banks are net-negative on digital and service — digital is the sharper wound. BRAC digital sits around the high −30s pp vs SCB around the low −60s pp, so SCB’s app/UX talk is materially worse. Service nets also flipped negative for both (SCB more so). Neither bank has a safe experience anchor; BRAC is less damaged digitally, not positively loved.", "sentiment")}
-  <p class="section-note">Digital = App/UX · Physical = Service. Net = pos% − neg%.</p>
+  {section_title("Monthly App/UX sentiment %", "Solid lines = share of App/UX talk that is positive; dotted lines = share that is negative (same brand colors). When a bank’s dotted line sits above its solid line, complaint dominates digital talk that month. Compare BRAC vs SCB to see who is winning or losing digital goodwill over time.", "mentions")}
+  <p class="section-note">Among App/UX-tagged mentions each month. Solid = positive % · dotted = negative %. Hover for monthly counts.</p>
 </div>
 """,
-            unsafe_allow_html=True,
-        )
-        if not phy.empty:
-            fig = px.bar(
-                phy,
-                x="touchpoint",
-                y="net",
-                color="brand",
-                barmode="group",
-                color_discrete_map=brand_color_map(),
-                custom_data=["pos_pct", "neg_pct", "count"],
-                labels={"net": "Net sentiment (pp)", "touchpoint": ""},
-                text=phy["net"].map(lambda x: f"{x:+.0f}"),
+        unsafe_allow_html=True,
+    )
+    if not monthly.empty:
+        fig = go.Figure()
+        for brand, color in brand_color_map().items():
+            sub = monthly[monthly["brand"] == brand].sort_values("month")
+            if sub.empty:
+                continue
+            fig.add_trace(
+                go.Scatter(
+                    name=f"{brand} · positive",
+                    x=sub["month"],
+                    y=sub["pos_pct"],
+                    mode="lines+markers",
+                    line=dict(color=color, width=2.5, dash="solid"),
+                    marker=dict(size=7, color=color, line=dict(width=1, color="rgba(255,255,255,0.4)")),
+                    customdata=sub[["count", "neg_pct"]],
+                    hovertemplate=(
+                        "<b>%{x}</b><br>%{y:.0f}% positive · %{customdata[1]:.0f}% negative"
+                        " (n=%{customdata[0]})<extra>" + brand + "</extra>"
+                    ),
+                )
             )
-            fig.update_traces(
-                textposition="outside",
-                hovertemplate="<b>%{x}</b><br>Net %{y:+.0f}pp · pos %{customdata[0]:.0f}% · neg %{customdata[1]:.0f}% · n=%{customdata[2]}<extra>%{fullData.name}</extra>",
+            fig.add_trace(
+                go.Scatter(
+                    name=f"{brand} · negative",
+                    x=sub["month"],
+                    y=sub["neg_pct"],
+                    mode="lines+markers",
+                    line=dict(color=color, width=2.25, dash="dot"),
+                    marker=dict(size=6, color=color, symbol="diamond", line=dict(width=0)),
+                    customdata=sub[["count", "pos_pct"]],
+                    hovertemplate=(
+                        "<b>%{x}</b><br>%{y:.0f}% negative · %{customdata[1]:.0f}% positive"
+                        " (n=%{customdata[0]})<extra>" + brand + "</extra>"
+                    ),
+                )
             )
-            fig.add_hline(y=0, line_width=1, line_color=BRAC_SILVER)
-            st.plotly_chart(fig_layout(fig, chart_height(380), mode), use_container_width=True)
-
-    with t2:
-        st.markdown(
-            f"""
-<div class="tile">
-  {section_title("Monthly App/UX positivity %", "Tracks how positive App/UX talk is month by month for each bank. When BRAC's line sits above SCB, BRAC is winning digital goodwill that month. Sharp drops are prompts to check for app updates, outages or process changes that hurt one bank more than the other.", "mentions")}
-  <p class="section-note">Both banks. Hover for monthly mention counts.</p>
-</div>
-""",
-            unsafe_allow_html=True,
-        )
-        if not monthly.empty:
-            fig = px.line(
-                monthly,
-                x="month",
-                y="pos_pct",
-                color="brand",
-                markers=True,
-                color_discrete_map=brand_color_map(),
-                custom_data=["count"],
-                labels={"pos_pct": "Positive %", "month": ""},
-            )
-            fig.update_traces(
-                line=dict(width=2.5),
-                marker=dict(size=7, line=dict(width=1, color="rgba(255,255,255,0.4)")),
-                hovertemplate="<b>%{x}</b><br>%{y:.0f}% positive (n=%{customdata[0]})<extra>%{fullData.name}</extra>",
-            )
-            st.plotly_chart(fig_layout(fig, chart_height(380), mode), use_container_width=True)
+        fig.update_layout(yaxis_title="% of App/UX mentions", xaxis_title="")
+        st.plotly_chart(fig_layout(fig, chart_height(420), mode), use_container_width=True)
 
 # =============================================================================
 with tab_demo:
