@@ -240,6 +240,7 @@ def theme_prevalence(df: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+# schema bump: meaningfulness uses pct_positive (within-theme); see positive_differentiation_index
 def meaningfulness(df: pd.DataFrame) -> pd.DataFrame:
     """% of theme-tagged mentions that are positive (within-theme praise rate)."""
     rows = []

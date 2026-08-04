@@ -5,6 +5,7 @@ Run:  .\\.venv\\Scripts\\streamlit.exe run dashboard/app.py
 
 from __future__ import annotations
 
+import importlib
 import sys
 from pathlib import Path
 
@@ -18,6 +19,9 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from dashboard import analytics as A
+
+# Streamlit can keep a stale analytics module in memory after partial reruns.
+A = importlib.reload(A)
 
 st.set_page_config(
     page_title="BIBM Brand Listening — BRAC vs SCB",
@@ -760,19 +764,30 @@ with tab_perf:
             unsafe_allow_html=True,
         )
         if not mean_df.empty:
+            # Prefer within-theme % positive; fall back if a stale module is loaded.
+            y_col = "pct_positive" if "pct_positive" in mean_df.columns else "per_100"
+            custom = (
+                ["pos_count", "theme_count"]
+                if "theme_count" in mean_df.columns
+                else ["pos_count", "n_base"]
+            )
+            hover = (
+                "<b>%{x}</b><br>%{y:.1f}% positive (%{customdata[0]} of %{customdata[1]})"
+                "<extra>%{fullData.name}</extra>"
+                if y_col == "pct_positive"
+                else "<b>%{x}</b><br>%{y:.1f}/100 · n=%{customdata[0]}<extra>%{fullData.name}</extra>"
+            )
             fig = px.bar(
                 mean_df,
                 x="theme",
-                y="pct_positive",
+                y=y_col,
                 color="brand",
                 barmode="group",
                 color_discrete_map=brand_color_map(),
-                custom_data=["pos_count", "theme_count"],
-                labels={"pct_positive": "% positive within theme", "theme": ""},
+                custom_data=custom,
+                labels={y_col: "% positive within theme" if y_col == "pct_positive" else "Per 100 rows", "theme": ""},
             )
-            fig.update_traces(
-                hovertemplate="<b>%{x}</b><br>%{y:.1f}% positive (%{customdata[0]} of %{customdata[1]})<extra>%{fullData.name}</extra>"
-            )
+            fig.update_traces(hovertemplate=hover)
             st.plotly_chart(fig_layout(fig, chart_height(340), mode), use_container_width=True)
 
 # =============================================================================
