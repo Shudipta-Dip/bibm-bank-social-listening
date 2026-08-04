@@ -242,7 +242,7 @@ def write_summary_report(records: list[dict[str, Any]], path: Path | None = None
             theme_counter[r.get("brand") or "unknown"][t] += 1
 
     lines = [
-        "# BIBM Social Listening - Summary Report",
+        "# Banking Social Media Analysis - Summary Report",
         "",
         f"Generated: `{utc_now().isoformat()}`",
         "",

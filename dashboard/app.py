@@ -1,4 +1,4 @@
-"""BIBM Brand Listening Dashboard — BRAC vs SCB.
+"""Banking Social Media Analysis dashboard — BRAC vs SCB.
 
 Run:  .\\.venv\\Scripts\\streamlit.exe run dashboard/app.py
 """
@@ -24,7 +24,7 @@ from dashboard import analytics as A
 A = importlib.reload(A)
 
 st.set_page_config(
-    page_title="BIBM Brand Listening — BRAC vs SCB",
+    page_title="Banking Social Media Analysis — BRAC vs SCB",
     page_icon="◈",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -624,7 +624,7 @@ st.sidebar.caption(f"{len(df):,} rows in view · {len(raw):,} cleaned total")
 # ── Header + KPI bento ────────────────────────────────────────────────────────
 st.markdown(
     '<p class="dash-title">BRAC Bank vs Standard Chartered Bangladesh</p>'
-    '<p class="dash-sub">BIBM social listening — comparative brand metrics. Hover charts for counts. '
+    '<p class="dash-sub">Banking Social Media Analysis — comparative brand metrics. Hover charts for counts. '
     "Use the filters to recompute the comparative evidence.</p>",
     unsafe_allow_html=True,
 )

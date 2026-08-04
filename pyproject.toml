@@ -3,9 +3,9 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "bibm-bank-social-listening"
+name = "banking-social-media-analysis"
 version = "0.1.0"
-description = "BIBM social listening pipeline for BRAC Bank and SCB Bangladesh"
+description = "Banking Social Media Analysis pipeline for BRAC Bank and SCB Bangladesh"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = []

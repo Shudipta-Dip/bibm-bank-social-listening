@@ -1,6 +1,6 @@
-# BIBM Bank Social Listening
+# Banking Social Media Analysis
 
-Comparative social-listening study for **BRAC Bank** vs **Standard Chartered Bangladesh** (BIBM brand management).
+Comparative social-listening study for **BRAC Bank** vs **Standard Chartered Bangladesh**.
 
 Interactive dashboard + free collection/NLP pipeline (Facebook BCUB group searches, Google Play, App Store, Reddit).
 
@@ -20,7 +20,7 @@ python scripts/build_github_pages.py
 ## Quick start (dashboard only)
 
 ```powershell
-cd $env:USERPROFILE\Projects\bibm-bank-social-listening
+cd <project-root>
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt

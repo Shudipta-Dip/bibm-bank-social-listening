@@ -1,4 +1,4 @@
-# Adversarial Sentiment Classification Audit — BIBM
+# Adversarial Sentiment Classification Audit — Banking Social Media Analysis
 
 **Date:** 2026-07-30  
 **Corpus:** `data/processed/unified_mentions_clean.csv` (n = 3,642)  
@@ -182,7 +182,7 @@ Supporting files: `false_positive_candidates.csv`, `false_negative_candidates.cs
 2. **Re-process** the corpus with XLM-R (and BanglaBERT-Senti for `bn`/`mixed`) into parallel columns: `sentiment_text_model`, keep `rating_sentiment` separate; do not drop text label when stars exist.
 3. **Intent rule:** if query/advice flag and no clear affective clause → force `neutral` for brand dashboards.
 4. **Negation guard** for lexicon path if lexicon is retained as backup.
-5. **Activate gold QA:** label ≥200 stratified rows; enforce existing gates (macro-F1 ≥ 0.65, κ ≥ 0.5) before freezing metrics for BIBM.
+5. **Activate gold QA:** label ≥200 stratified rows; enforce existing gates (macro-F1 ≥ 0.65, κ ≥ 0.5) before freezing metrics.
 6. Dashboard: expose `sentiment_source` and dual charts (text vs stars) so stakeholders see the method.
 
 ---
@@ -190,7 +190,7 @@ Supporting files: `false_positive_candidates.csv`, `false_negative_candidates.cs
 ## 7. How to reproduce
 
 ```powershell
-cd C:\Users\USER\Projects\bibm-bank-social-listening
+cd <project-root>
 .\.venv\Scripts\pip.exe install torch transformers accelerate sentencepiece tiktoken
 # clones already under third_party/sentiment/ (see third_party/README.md)
 .\.venv\Scripts\python.exe analysis/sentiment_audit/run_adversarial_audit.py

@@ -514,7 +514,7 @@ def render_html(df: pd.DataFrame, figs: dict) -> str:
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>BRAC Bank vs Standard Chartered Bangladesh — BIBM</title>
+  <title>BRAC Bank vs Standard Chartered Bangladesh — Banking Social Media Analysis</title>
   <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
   <style>{CSS}</style>
 </head>
@@ -522,7 +522,7 @@ def render_html(df: pd.DataFrame, figs: dict) -> str:
   <div class="wrap">
     <div class="badge">GitHub Pages · static snapshot</div>
     <h1>BRAC Bank vs Standard Chartered Bangladesh</h1>
-    <p class="sub">BIBM social listening — comparative brand metrics. Interactive Plotly charts (hover for counts). For live sidebar filters, run the Streamlit app locally.</p>
+    <p class="sub">Banking Social Media Analysis — comparative brand metrics. Interactive Plotly charts (hover for counts). For live sidebar filters, run the Streamlit app locally.</p>
     {kpi_html(df)}
     <nav class="tabs" aria-label="Sections">
       <button type="button" class="active" data-panel="perf">Performance &amp; Themes</button>
@@ -537,7 +537,7 @@ def render_html(df: pd.DataFrame, figs: dict) -> str:
     <div id="demo" class="panel">{demo}</div>
     <div id="data" class="panel">{data_panel}</div>
     <footer>
-      Source repo: <a href="https://github.com/Shudipta-Dip/bibm-bank-social-listening">Shudipta-Dip/bibm-bank-social-listening</a>
+      Source repo: <a href="https://github.com/Shudipta-Dip/bibm-bank-social-listening">GitHub</a>
       · Rebuild with <code>python scripts/build_github_pages.py</code>
     </footer>
   </div>

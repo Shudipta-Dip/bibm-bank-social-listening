@@ -1,6 +1,6 @@
 # Third-party sentiment benchmarks
 
-Shallow clones used only for **adversarial validation** of BIBM social-listening
+Shallow clones used only for **adversarial validation** of Banking Social Media Analysis
 sentiment labels. They are not imported by the production pipeline or dashboard.
 
 | Directory | Upstream | Role in audit |

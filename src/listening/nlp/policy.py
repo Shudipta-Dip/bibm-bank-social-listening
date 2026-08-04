@@ -1,4 +1,4 @@
-"""Post-model sentiment policy (BIBM adversarial audit + human gold).
+"""Post-model sentiment policy (adversarial audit + human gold).
 
 Rules (2026-07-30 human edge-case pack):
 - Keep text sentiment and star/rating sentiment as *parallel* metrics (never merge).

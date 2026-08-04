@@ -1,4 +1,4 @@
-# BIBM - Facebook + LinkedIn browser scrape (no API tokens)
+# Banking Social Media Analysis - Facebook + LinkedIn browser scrape (no API tokens)
 # Run from project root in PowerShell after: .\.venv\Scripts\Activate.ps1
 #
 # What you may need to do:

@@ -34,7 +34,7 @@ from listening.utils import cutoff_since, ensure_dirs, load_config, load_env, pa
 
 @click.group()
 def cli() -> None:
-    """BIBM Bank Social Listening pipeline."""
+    """Banking Social Media Analysis pipeline."""
     load_env()
     ensure_dirs()
 
